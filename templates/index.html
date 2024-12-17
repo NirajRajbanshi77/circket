@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container text-center my-5">
+    <!-- Heading -->
+    <h1 class="display-4 text-primary mb-4">Welcome to Cricket Analytics and Guide</h1>
+
+    <!-- Button Row -->
+    <div class="row justify-content-center">
+        <!-- Register Button -->
+        <div class="col-md-4 mb-3">
+            <a href="{{ url_for('register') }}" class="btn btn-lg btn-success w-100" style="font-size: 1.1rem; color: white; font-weight: bold; border-radius: 5px;">Register</a>
+        </div>
+        
+        <!-- Login Button -->
+        <div class="col-md-4 mb-3">
+            <a href="{{ url_for('login') }}" class="btn btn-lg btn-info w-100" style="font-size: 1.1rem; color: black; font-weight: bold; border-radius: 5px;">Login</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

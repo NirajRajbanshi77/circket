@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+{% block content %}
+
+<body class="bg-light">
+  <div class="container text-center mt-5">
+    <h1 class="mb-4">Cricket Shot Detection</h1>
+    <p class="lead mb-4">Upload your cricket shot video to get detailed pose analysis and suggestions!</p>
+    <button id="analyze-btn" class="btn btn-primary mb-4">Analyze Your Cricket Shot</button>
+    <div class="canvas-container border rounded bg-white shadow-sm p-3">
+      <div id="canvas-holder"></div>
+    </div>
+    <div id="results" class="mt-4 text-center">
+      <h5 id="pose-label" class="text-secondary">Label: N/A</h5>
+      <h5 id="pose-confidence" class="text-secondary">Confidence: N/A</h5>
+    </div>
+  </div>
+
+  <script>
+    let video;
+    let poseNet;
+    let pose;
+    let skeleton;
+
+    let brain;
+    let poseLabel = "N/A";
+    let confidence = 0;
+    let isModelLoaded = false;
+
+    document.getElementById('analyze-btn').addEventListener('click', () => {
+      if (!isModelLoaded) {
+        setupPoseNet();
+      }
+    });
+
+    function setupPoseNet() {
+      const canvasContainer = document.getElementById('canvas-holder');
+      const canvas = createCanvas(640, 480);
+      canvas.parent(canvasContainer);
+
+      video = createCapture(VIDEO);
+      video.hide();
+
+      poseNet = ml5.poseNet(video, () => {
+        console.log('PoseNet model loaded');
+        isModelLoaded = true;
+      });
+      poseNet.on('pose', gotPoses);
+
+      const options = {
+        inputs: 34,
+        outputs: 4,
+        task: 'classification',
+        debug: true
+      };
+      brain = ml5.neuralNetwork(options);
+
+      const modelInfo = {
+        model: '/static/model/model(2).json',
+        metadata: '/static/model/model_meta(2).json',
+        weights: '/static/model/model.weights(2).bin',
+      };
+      brain.load(modelInfo, brainLoaded);
+    }
+
+    function brainLoaded() {
+      console.log('Pose classification model loaded');
+      classifyPose();
+    }
+
+    function classifyPose() {
+      if (pose) {
+        let inputs = [];
+        for (let i = 0; i < pose.keypoints.length; i++) {
+          let x = pose.keypoints[i].position.x;
+          let y = pose.keypoints[i].position.y;
+          inputs.push(x);
+          inputs.push(y);
+        }
+        brain.classify(inputs, gotResult);
+      } else {
+        setTimeout(classifyPose, 100);
+      }
+    }
+
+    function gotResult(error, results) {
+      if (results && results[0].confidence > 0.75) {
+        poseLabel = mapLabel(results[0].label.toUpperCase());
+        confidence = results[0].confidence;
+        updateResults(poseLabel, confidence);
+      }
+      classifyPose();
+    }
+
+    function updateResults(label, confidenceScore) {
+      document.getElementById('pose-label').textContent = `Label: ${label}`;
+      document.getElementById('pose-confidence').textContent = `Confidence: ${(confidenceScore * 100).toFixed(1)}%`;
+    }
+
+    function gotPoses(poses) {
+      if (poses.length > 0) {
+        pose = poses[0].pose;
+        skeleton = poses[0].skeleton;
+      }
+    }
+
+    function draw() {
+      if (video) {
+        push();
+        translate(video.width, 0);
+        scale(-1, 1);
+        image(video, 0, 0, video.width, video.height);
+
+        if (pose) {
+          for (let i = 0; i < skeleton.length; i++) {
+            let a = skeleton[i][0];
+            let b = skeleton[i][1];
+            strokeWeight(2);
+            stroke(0);
+            line(a.position.x, a.position.y, b.position.x, b.position.y);
+          }
+          for (let i = 0; i < pose.keypoints.length; i++) {
+            let x = pose.keypoints[i].position.x;
+            let y = pose.keypoints[i].position.y;
+            fill(0);
+            stroke(255);
+            ellipse(x, y, 16, 16);
+          }
+        }
+        pop();
+      }
+    }
+
+    function mapLabel(label) {
+      const labels = {
+        "Z": "PRESTANCE",
+        "X": "STANCE",
+        "C": "PULL",
+        "V": "SWEEP"
+      };
+      return labels[label] || "UNKNOWN";
+    }
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  {%endblock%}

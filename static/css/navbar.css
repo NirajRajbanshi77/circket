@@ -1,0 +1,19 @@
+body {
+    background: url('../images/maninder-sidhu-qoMXr0pQCqk-unsplash.jpg');
+    background-blend-mode: multiply;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+@media(max-width:991px){
+    .sidebar{
+        background-color: rgba(225,225,225,0.15);
+        backdrop-filter: blur(10px);
+    }
+}
+
+nav li {
+    list-style-type: none; /* Removes the bullet points */
+}
+

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+    <!-- Heading -->
+    <h1 class="text-primary text-center mb-4">Register</h1>
+
+    <!-- Registration Form -->
+    <form method="POST" action="{{ url_for('register') }}">
+        <div class="mb-3">
+            <label for="username" class="form-label text-dark">Username:</label>
+            <input type="text" name="username" class="form-control" id="username" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="email" class="form-label text-dark">Email:</label>
+            <input type="email" name="email" class="form-control" id="email" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="password" class="form-label text-dark">Password:</label>
+            <input type="password" name="password" class="form-control" id="password" required>
+        </div>
+        
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-lg btn-success w-100" style="font-size: 1.1rem; color: white; font-weight: bold; border-radius: 5px;">
+            Register
+        </button>
+    </form>
+</div>
+{% endblock %}

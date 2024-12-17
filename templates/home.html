@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+    <!-- Hero Section -->
+    <div class="text-center bg-dark text-white p-5 rounded">
+        <h1 class="display-4">Enhance Your Cricket Skills</h1>
+        <p class="lead">Analyze your game, learn cricket rules, and get better every day!</p>
+        <a href="{{ url_for('analyze') }}" class="btn btn-success btn-lg me-3">Get Started</a>
+        <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg">Join Us</a>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row text-center mt-5">
+        <div class="col-md-3">
+            <img src="/static/images/analyze.png" alt="Analyze" class="img-fluid mb-3">
+            <h3>Analyze Your Game</h3>
+            <p>Upload your cricket shots for AI-based feedback and improvement tips.</p>
+        </div>
+        <div class="col-md-3">
+            <img src="/static/images/knowledge.png" alt="Knowledge" class="img-fluid mb-3">
+            <h3>Cricket Knowledge</h3>
+            <p>Learn the rules, techniques, and interesting facts about cricket.</p>
+        </div>
+        <div class="col-md-3">
+            <img src="/static/images/improve.png" alt="Improve" class="img-fluid mb-3">
+            <h3>Track Improvement</h3>
+            <p>Get personalized suggestions to enhance your batting and bowling skills.</p>
+        </div>
+        <div class="col-md-3">
+            <img src="/static/images/community.png" alt="Community" class="img-fluid mb-3">
+            <h3>Connect with Community</h3>
+            <p>Engage with cricket enthusiasts and share your progress.</p>
+        </div>
+    </div>
+
+    <!-- Steps to Get Started -->
+    <div class="bg-light p-5 rounded mt-5">
+        <h2 class="text-center mb-4">How to Get Started</h2>
+        <div class="row">
+            <div class="col-md-3 text-center">
+                <h3 class="text-primary">1. Register</h3>
+                <p>Create an account to access our features.</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <h3 class="text-primary">2. Upload</h3>
+                <p>Share a video of your cricket shots for analysis.</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <h3 class="text-primary">3. Analyze</h3>
+                <p>Receive feedback on your technique and improve.</p>
+            </div>
+            <div class="col-md-3 text-center">
+                <h3 class="text-primary">4. Learn & Grow</h3>
+                <p>Explore cricket knowledge and improve over time.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cricket Knowledge Teaser -->
+    <div class="text-center bg-success text-white p-4 rounded mt-5">
+        <h2>Explore Cricket Knowledge</h2>
+        <p>Learn rules, techniques, and fascinating cricket facts.</p>
+        <a href="{{ url_for('cricketknowledge') }}" class="btn btn-warning btn-lg">Learn More</a>
+    </div>
+</div>
+{% endblock %}
